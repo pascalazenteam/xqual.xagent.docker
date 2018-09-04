@@ -72,9 +72,23 @@ COPY settings-docker.xml /usr/share/maven/ref/
 #ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
 #CMD ["mvn"]
 
+# get wget  and unzip 
+RUN apt-get update && \
+	apt-get install wget
+RUN apt-get update && \
+	apt-get install unzip
+
+
+	
+	
 # copy XStudio from your local directory
 RUN mkdir -p /usr/share/xqual
-COPY xstudio_v3_3sp3_linux.tar /usr/share/xqual/xstudio.tar
+RUN chdir /usr/share/xqual
+RUN wget http://xstudio.alwaysdata.net/support/releases/3.3sp3/xstudio_v3_3sp3_linux.tar.zip
+RUN unzip xstudio_v3_3sp3_linux.tar.zip -d /usr/share/xqual
+RUN rm -f /usr/share/xqual/xstudio_v3_3sp3_linux.tar.zip 
+RUN mv /usr/share/xqual/xstudio_v3_3sp3_linux.tar /usr/share/xqual/xstudio.tar
+#COPY xstudio_v3_3sp3_linux.tar /usr/share/xqual/xstudio.tar
 RUN tar -xvf /usr/share/xqual/xstudio.tar -C /usr/share/xqual
 RUN rm -f /usr/share/xqual/xstudio.tar
 
